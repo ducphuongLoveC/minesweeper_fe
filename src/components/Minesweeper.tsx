@@ -251,7 +251,6 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import { Socket } from 'socket.io-client';
-import CustomDialog from './CustomDialog';
 
 type Props = {
     ratioX: number;
@@ -262,6 +261,7 @@ type Props = {
     playerId?: string; // ID of the board's owner
     isOwnBoard: boolean;
     playerName?: string;
+    onDataEnd?: Function
 };
 
 type Cell = {
@@ -282,7 +282,7 @@ type Player = {
     type: string
 }
 
-const Minesweeper = ({ ratioX, ratioY, gameMode, socket, room, playerId, isOwnBoard, playerName }: Props) => {
+const Minesweeper = ({ ratioX, ratioY, gameMode, socket, room, playerId, isOwnBoard, playerName, onDataEnd }: Props) => {
     const totalCells = ratioX * ratioY;
     const [board, setBoard] = useState<Cell[]>([]);
     const [minePositions, setMinePositions] = useState<number[]>([]);
@@ -298,15 +298,14 @@ const Minesweeper = ({ ratioX, ratioY, gameMode, socket, room, playerId, isOwnBo
         playerName: '',
         type: ''
     });
-    const [openDialog, setOpenDialog] = useState(false);
 
 
     // Tính số mìn dựa trên kích thước bảng
     const calculateMines = (): number => {
-        if (gameMode === 'pvp') {
-            const difficulty = room ? (room as any).difficulty || 'beginner' : 'beginner';
-            return difficultyLevels[difficulty].mines;
-        }
+        // if (gameMode === 'pvp') {
+        //     const difficulty = room ? (room as any).difficulty || 'beginner' : 'beginner';
+        //     return difficultyLevels[difficulty].mines;
+        // }
         const mineRatio = totalCells < 100 ? 0.12 : totalCells <= 300 ? 0.15 : 0.20;
         let mineCount = Math.floor(totalCells * mineRatio);
         mineCount = Math.max(1, mineCount);
@@ -562,9 +561,12 @@ const Minesweeper = ({ ratioX, ratioY, gameMode, socket, room, playerId, isOwnBo
 
         socket.on('endGame', (data) => {
             console.log('Received endGame:', data);
+
+            if (onDataEnd) {
+                onDataEnd(data);
+            }
             setDataEnd(data);
-            setOpenDialog(true);
-            setGameOver(true); // Mark game as over
+            setGameOver(true);
         });
 
         return () => {
@@ -693,9 +695,7 @@ const Minesweeper = ({ ratioX, ratioY, gameMode, socket, room, playerId, isOwnBo
                     </button>
                 ))}
             </div>
-            <CustomDialog open={openDialog} title={'Kết thúc'} onClose={() => setOpenDialog(false)}>
-                {`Người chơi ${dataEnd?.playerName} ${dataEnd.type === 'lost' ? 'đã chạm vào bom' : 'đã hoàn thành màn chơi'}`}
-            </CustomDialog>
+
         </div>
     );
 };
