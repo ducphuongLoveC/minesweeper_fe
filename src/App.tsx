@@ -768,8 +768,10 @@ const App = () => {
     setGameKey(prev => prev + 1);
   };
 
+  
+
   const initializeSocket = () => {
-    const newSocket = io('http://localhost:3000');
+    const newSocket = io(import.meta.env.VITE_URL_SERVER);
     setSocket(newSocket);
     return newSocket;
   };
@@ -831,7 +833,7 @@ const App = () => {
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center p-4">
       <header className="w-full max-w-3xl">
-        <h1 className="text-4xl font-bold text-center text-gray-800 mb-6">Minesweeper by Duc Phuong</h1>
+        <h1 className="text-4xl font-bold text-center text-gray-800 mb-6">Minesweeper by Duc Phuong </h1>
 
         <div className="flex justify-center gap-4 mb-6">
           <button
