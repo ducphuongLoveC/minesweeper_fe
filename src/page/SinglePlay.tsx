@@ -24,7 +24,9 @@ function SinglePlay() {
     const [socket, setSocket] = useState<any>(null);
 
     useEffect(() => {
-        const newSocket = io(`${import.meta.env.VITE_URL_SERVER}/single`);
+        const newSocket = io(`${import.meta.env.VITE_URL_SERVER}/single`, {
+            transports: ["websocket"],
+        });
         setSocket(newSocket);
         return () => {
             newSocket.disconnect();

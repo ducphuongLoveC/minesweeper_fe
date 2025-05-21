@@ -4,7 +4,9 @@ import PvpPlay from "./PvpPlay";
 import RoomList from "../Components/RoomList";
 
 
-const socket = io(`${import.meta.env.VITE_URL_SERVER}/pvp`);
+const socket = io(`${import.meta.env.VITE_URL_SERVER}/pvp`, {
+    transports: ["websocket"],
+});
 
 interface Room {
     id: string;
