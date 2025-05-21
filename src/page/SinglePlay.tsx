@@ -24,7 +24,7 @@ function SinglePlay() {
     const [socket, setSocket] = useState<any>(null);
 
     useEffect(() => {
-        const newSocket = io("http://localhost:3000/single");
+        const newSocket = io(`${import.meta.env.VITE_URL_SERVER}/single`);
         setSocket(newSocket);
         return () => {
             newSocket.disconnect();
@@ -51,7 +51,7 @@ function SinglePlay() {
         },
         [socket]
     );
-    
+
     const toggleFlag = useCallback(
         (index: number, e: React.MouseEvent) => {
             e.preventDefault();
@@ -63,8 +63,8 @@ function SinglePlay() {
     useEffect(() => {
         if (!socket) return;
 
-        const handleConnect = () => toast.success("Đã kết nối đến server!");
-        const handleDisconnect = () => toast.error("Mất kết nối với server!");
+        // const handleConnect = () => toast.success("Đã kết nối đến server!");
+        // const handleDisconnect = () => toast.error("Mất kết nối với server!");
         const handleError = ({ message }: { message: string }) => toast.error(message);
         const handleSetGames = ({ gameState, playerState }: any) => {
             setGameState(gameState);
@@ -83,16 +83,16 @@ function SinglePlay() {
             setEndedGame(true);
         };
 
-        socket.on("connect", handleConnect);
-        socket.on("disconnect", handleDisconnect);
+        // socket.on("connect", handleConnect);
+        // socket.on("disconnect", handleDisconnect);
         socket.on("error", handleError);
         socket.on("setGames", handleSetGames);
         socket.on("updateState", handleUpdateState);
         socket.on("gameOver", handleGameOver);
 
         return () => {
-            socket.off("connect", handleConnect);
-            socket.off("disconnect", handleDisconnect);
+            // socket.off("connect", handleConnect);
+            // socket.off("disconnect", handleDisconnect);
             socket.off("error", handleError);
             socket.off("setGames", handleSetGames);
             socket.off("updateState", handleUpdateState);

@@ -4,7 +4,7 @@ import PvpPlay from "./PvpPlay";
 import RoomList from "../Components/RoomList";
 
 
-const socket = io("http://localhost:3000/pvp");
+const socket = io(`${import.meta.env.VITE_URL_SERVER}/pvp`);
 
 interface Room {
     id: string;
@@ -37,7 +37,7 @@ const PVP: React.FC = () => {
             socket.off("roomList", handleRoomList);
         };
     }, []);
-    
+
     return (
         <div className="flex">
             {!isInRoom && (
