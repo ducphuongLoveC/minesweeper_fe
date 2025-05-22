@@ -9,6 +9,6 @@ export const serverOptionsConfig: serverOptionsProp[] = [
     },
     {
         title: 'Máy chủ local',
-        path: 'http://192.168.0.191:3000',
+        path: 'https://0991-123-25-30-4.ngrok-free.app',
     }
 ]
