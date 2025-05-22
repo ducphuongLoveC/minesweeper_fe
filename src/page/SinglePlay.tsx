@@ -37,7 +37,7 @@ function SinglePlay() {
     const [socket, setSocket] = useState<any>(null);
 
     useEffect(() => {
-        const newSocket = io(`${import.meta.env.VITE_URL_SERVER}/single`, {
+        const newSocket = io(`http://192.168.0.191:3000/single`, {
             transports: ["websocket"],
             reconnectionAttempts: 3,
             reconnectionDelay: 1000,
