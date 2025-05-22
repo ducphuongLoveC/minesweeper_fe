@@ -4,6 +4,7 @@ import MinesweeperModeSelector from "./Components/MinesweeperModeSelector";
 import { toast } from "react-toastify";
 import { io } from "socket.io-client";
 import CustomDialog from "../components/CustomDialog";
+import { useAppSelector } from "../hooks/useRedux";
 
 
 export const numberColorClasses = new Map([
@@ -36,8 +37,12 @@ function SinglePlay() {
     const [endedGame, setEndedGame] = useState(false);
     const [socket, setSocket] = useState<any>(null);
 
+
+    const { selectedServer } = useAppSelector((state) => state.serverOptions);
+
+
     useEffect(() => {
-        const newSocket = io(`http://192.168.0.191:3000/single`, {
+        const newSocket = io(`${selectedServer}/single`, {
             transports: ["websocket"],
             reconnectionAttempts: 3,
             reconnectionDelay: 1000,
@@ -50,7 +55,7 @@ function SinglePlay() {
         return () => {
             newSocket.disconnect();
         };
-    }, []);
+    }, [selectedServer]);
 
     const normalizePlayerState = useCallback((state: any) => {
         return {
