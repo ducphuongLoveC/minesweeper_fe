@@ -220,17 +220,17 @@ function SinglePlay() {
     }, [gameState, playerState, endedGame, openCell, toggleFlag]);
 
     return (
-        <div className="p-4 bg-gray-200 font-sans max-w-[500px]">
+        <div className="p-4 bg-gray-200 font-sans w-[500px]">
             <MinesweeperModeSelector onModeChange={setConfigMode} />
             <div className="flex items-center justify-between">
-                <div className="py-2 px-4 text-center border-2 font-medium text-sm rounded-sm min-w-[100px] bg-gray-300 border-t-2 border-l-2 border-b-2 border-r-2 border-t-white border-l-white border-b-gray-500 border-r-gray-500">
+                <div className="w-full text-center border-2 font-medium text-sm rounded-sm min-w-[100px] bg-gray-300 border-t-2 border-l-2 border-b-2 border-r-2 border-t-white border-l-white border-b-gray-500 border-r-gray-500">
                     1/{gameState?.totalMines}
                 </div>
-                <div className="py-2 px-4 text-center border-2 font-medium text-sm rounded-sm min-w-[100px] bg-gray-300 border-t-2 border-l-2 border-b-2 border-r-2 border-t-white border-l-white border-b-gray-500 border-r-gray-500">
+                <div className="w-full text-center border-2 font-medium text-sm rounded-sm min-w-[100px] bg-gray-300 border-t-2 border-l-2 border-b-2 border-r-2 border-t-white border-l-white border-b-gray-500 border-r-gray-500">
                     1/{gameState?.totalMines}
                 </div>
 
-                <div className="py-2 px-4 text-center border-2 font-medium text-sm rounded-sm min-w-[100px] bg-gray-300 border-t-2 border-l-2 border-b-2 border-r-2 border-t-white border-l-white border-b-gray-500 border-r-gray-500">
+                <div className="w-full text-center border-2 font-medium text-sm rounded-sm min-w-[100px] bg-gray-300 border-t-2 border-l-2 border-b-2 border-r-2 border-t-white border-l-white border-b-gray-500 border-r-gray-500">
                     100
                 </div>
             </div>

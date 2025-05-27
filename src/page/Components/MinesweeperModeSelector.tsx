@@ -173,12 +173,12 @@ const MinesweeperModeSelector: React.FC<MinesweeperModeSelectorProps> = ({ onMod
   return (
     <div className="w-full font-sans">
       <h1 className="text-lg font-bold text-gray-800 mb-3">Chọn chế độ</h1>
-      <div className="flex flex-row flex-wrap gap-2">
+      <div className="flex my-1">
         {gameModes.map((mode) => (
           <button
             key={mode.name}
             onClick={() => handleModeSelect(mode)}
-            className={`py-2 px-4 text-center border-2 font-medium text-sm rounded-sm ${selectedMode.name === mode.name && !showCustom
+            className={`w-full text-center border-2 font-medium text-sm rounded-sm ${selectedMode.name === mode.name && !showCustom
               ? "bg-gray-200 border-t-white border-l-white border-b-gray-500 border-r-gray-500"
               : "bg-gray-300 border-t-white border-l-white border-b-gray-500 border-r-gray-500 hover:bg-gray-400"
               }`}
@@ -189,7 +189,7 @@ const MinesweeperModeSelector: React.FC<MinesweeperModeSelectorProps> = ({ onMod
         ))}
         <button
           onClick={() => setShowCustom(!showCustom)}
-          className={`py-2 px-4 text-center border-2 font-medium text-sm rounded-sm ${showCustom || selectedMode.name === "Custom"
+          className={`w-full text-center border-2 font-medium text-sm rounded-sm ${showCustom || selectedMode.name === "Custom"
             ? "bg-gray-200 border-t-white border-l-white border-b-gray-500 border-r-gray-500"
             : "bg-gray-300 border-t-white border-l-white border-b-gray-500 border-r-gray-500 hover:bg-gray-400"
             }`}
@@ -249,7 +249,7 @@ const MinesweeperModeSelector: React.FC<MinesweeperModeSelectorProps> = ({ onMod
           </div>
           <button
             onClick={handleCustomSubmit}
-            className="w-full py-2 bg-gray-300 border-2 border-t-white border-l-white border-b-gray-500 border-r-gray-500 text-sm font-medium hover:bg-gray-400 rounded-sm"
+            className="w-full bg-gray-300 border-2 border-t-white border-l-white border-b-gray-500 border-r-gray-500 text-sm font-medium hover:bg-gray-400 rounded-sm"
             aria-label="Save custom mode"
           >
             Lưu

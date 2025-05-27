@@ -3,9 +3,13 @@ export type serverOptionsProp = {
     path: string,
 }
 export const serverOptionsConfig: serverOptionsProp[] = [
-    
+
     {
-        title: 'localtunnel',
+        title: 'Máy chủ cloudflared',
+        path: 'https://activated-those-sight-adolescent.trycloudflare.com',
+    },
+    {
+        title: 'Máy chủ localtunnel',
         path: 'https://fast-kids-wonder.loca.lt',
     },
     {
