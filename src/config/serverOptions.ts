@@ -3,7 +3,11 @@ export type serverOptionsProp = {
     path: string,
 }
 export const serverOptionsConfig: serverOptionsProp[] = [
-
+    
+    {
+        title: 'localtunnel',
+        path: 'https://fast-kids-wonder.loca.lt',
+    },
     {
         title: 'Máy chủ ngrok',
         path: 'https://toad-arriving-accurately.ngrok-free.app',

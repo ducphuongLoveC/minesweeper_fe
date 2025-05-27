@@ -6,7 +6,6 @@ import { io } from "socket.io-client";
 import CustomDialog from "../components/CustomDialog";
 import { useAppSelector } from "../hooks/useRedux";
 
-
 export const numberColorClasses = new Map([
     [1, "text-blue-700"],
     [2, "text-green-700"],
@@ -17,7 +16,6 @@ export const numberColorClasses = new Map([
     [7, "text-black"],
     [8, "text-gray-700"],
 ]);
-
 
 const getNumberClass = (count: any, isRevealed: boolean): string => {
     if (!isRevealed || !count || typeof count !== "number") return "";
@@ -222,8 +220,20 @@ function SinglePlay() {
     }, [gameState, playerState, endedGame, openCell, toggleFlag]);
 
     return (
-        <div className="p-4 bg-gray-200 font-sans max-w-[600px]">
+        <div className="p-4 bg-gray-200 font-sans max-w-[500px]">
             <MinesweeperModeSelector onModeChange={setConfigMode} />
+            <div className="flex items-center justify-between">
+                <div className="py-2 px-4 text-center border-2 font-medium text-sm rounded-sm min-w-[100px] bg-gray-300 border-t-2 border-l-2 border-b-2 border-r-2 border-t-white border-l-white border-b-gray-500 border-r-gray-500">
+                    1/{gameState?.totalMines}
+                </div>
+                <div className="py-2 px-4 text-center border-2 font-medium text-sm rounded-sm min-w-[100px] bg-gray-300 border-t-2 border-l-2 border-b-2 border-r-2 border-t-white border-l-white border-b-gray-500 border-r-gray-500">
+                    1/{gameState?.totalMines}
+                </div>
+
+                <div className="py-2 px-4 text-center border-2 font-medium text-sm rounded-sm min-w-[100px] bg-gray-300 border-t-2 border-l-2 border-b-2 border-r-2 border-t-white border-l-white border-b-gray-500 border-r-gray-500">
+                    100
+                </div>
+            </div>
             {gameState && <div className="mt-4">{renderBoard()}</div>}
             <CustomDialog
                 open={openDialog.end}
