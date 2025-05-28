@@ -640,6 +640,7 @@ const PvpPlay: React.FC<PvpPlayProp> = ({ socket, onInRoom, onLeaveRoom }) => {
   const [roomId, setRoomId] = useState('');
   const [playerId, setPlayerId] = useState<string | null>(null);
   const [playerName, setPlayerName] = useState("");
+  const [maxPlayers, setMaxPlayers] = useState<Number>(2);
   const [gameStates, setGameStates] = useState<any | null>(null);
   const [playerStates, setPlayerStates] = useState<Map<string, PlayerState>>(new Map());
   const [players, setPlayers] = useState<Player[]>([]);
@@ -651,6 +652,7 @@ const PvpPlay: React.FC<PvpPlayProp> = ({ socket, onInRoom, onLeaveRoom }) => {
 
   // Sử dụng useMemo để tránh tính toán lại các giá trị không thay đổi
   const currentPlayer = useMemo(() => players.find((p) => p.id === playerId), [players, playerId]);
+  console.log(playerStates);
 
   const normalizePlayerStates = useCallback(
     (states: { [key: string]: { revealedCells: number[]; flags: number[] } }) => {
@@ -695,6 +697,7 @@ const PvpPlay: React.FC<PvpPlayProp> = ({ socket, onInRoom, onLeaveRoom }) => {
     };
 
     const handleUpdateState = ({ gameStates, playerStates, action }: any) => {
+
       setGameStates(gameStates);
       setPlayerStates(normalizePlayerStates(playerStates));
 
@@ -827,9 +830,9 @@ const PvpPlay: React.FC<PvpPlayProp> = ({ socket, onInRoom, onLeaveRoom }) => {
   const createRoom = useCallback(() => {
     const newRoomId = uuidv4();
     setRoomId(newRoomId);
-    socket.emit("joinRoom", newRoomId, playerName, configMode);
+    socket.emit("joinRoom", newRoomId, playerName, configMode, maxPlayers);
     onInRoom();
-  }, [playerName, configMode, socket, onInRoom]);
+  }, [playerName, configMode, maxPlayers, socket, onInRoom]);
 
   const startGame = useCallback(() => {
     socket.emit("startGame", roomId);
@@ -856,7 +859,10 @@ const PvpPlay: React.FC<PvpPlayProp> = ({ socket, onInRoom, onLeaveRoom }) => {
 
   const openCell = useCallback(
     (index: number) => {
+
       if (gameStates && !checkGameOver()) {
+        console.log(index, 'here');
+
         socket.emit("openCell", { roomId, index });
       }
     },
@@ -882,21 +888,101 @@ const PvpPlay: React.FC<PvpPlayProp> = ({ socket, onInRoom, onLeaveRoom }) => {
     [gameStates, roomId, socket, checkGameOver]
   );
 
+  // const renderBoard = useCallback(
+  //   (isOpponent: boolean, game: any, pId: any) => {
+  //     if (!gameStates) return null;
+
+  //     console.log('vip', playerStates);
+
+
+  //     const { ratioX, ratioY, cells } = game;
+  //     const currentPlayerState = playerStates.get(pId);
+  //     // const opponentId = Array.from(playerStates.keys()).find((id) => id !== playerId);
+  //     // const opponentState = opponentId ? playerStates.get(opponentId) : null;
+
+  //     const currentRevealed = currentPlayerState?.revealedCells || new Set();
+  //     const currentFlags = currentPlayerState?.flags || new Set();
+  //     // const opponentRevealed = opponentState?.revealedCells || new Set();
+  //     // const opponentFlags = opponentState?.flags || new Set();
+
+  //     // Tạo mảng cells một lần để tối ưu hiệu suất
+  //     return (
+  //       <div
+  //         className="grid gap-[1px] bg-gray-300 p-1 border-2 border-t-white border-l-white border-b-gray-500 border-r-gray-500 rounded-sm"
+  //         style={{
+  //           gridTemplateColumns: `repeat(${ratioY}, 24px)`,
+  //           gridTemplateRows: `repeat(${ratioX}, 24px)`,
+  //         }}
+  //       >
+  //         {cells.map((cell: any, index: number) => {
+  //           const isRevealed = currentRevealed.has(index);
+  //           const isFlagged = currentFlags.has(index);
+  //           const canInteract = !isOpponent && !checkGameOver() && !isRevealed;
+  //           const interactive = canInteract && gameStarted;
+  //           const canChording = currentRevealed.has(index) && !isOpponent;
+
+  //           let content = "";
+  //           if (isFlagged) content = "🚩";
+  //           else if (isRevealed) {
+  //             content = cell.isMine ? "💣" : cell.count > 0 ? cell.count.toString() : "";
+  //           } else if (cell.isMarkHint) content = "x";
+
+  //           const cellClasses = [
+  //             isNumber(cell?.count) ? numberColorClasses.get(cell.count) : "",
+  //             "flex items-center justify-center w-6 h-6 text-sm font-bold",
+  //             isRevealed
+  //               ? "bg-gray-200"
+  //               : "bg-gray-300 border-t-2 border-l-2 border-b-2 border-r-2 border-t-white border-l-white border-b-gray-500 border-r-gray-500",
+  //             interactive ? "cursor-pointer hover:bg-gray-400" : "cursor-default",
+  //           ].join(" ");
+
+  //           return (
+  //             <div
+  //               key={index}
+  //               className={cellClasses}
+  //               onClick={() => interactive ? openCell(index) : canChording ? chording(index) : undefined}
+  //               onContextMenu={canInteract ? (e) => toggleFlag(index, e) : undefined}
+  //             >
+  //               {content}
+  //             </div>
+  //           );
+  //         })}
+  //       </div>
+  //     );
+  //   },
+  //   [gameStates, playerStates, playerId, gameStarted, openCell, toggleFlag, chording, checkGameOver]
+  // );
+
+
+
+  const Cell = React.memo(({
+    content,
+    className,
+    onClick,
+    onContextMenu
+  }: any) => (
+    <div
+      className={className}
+      onClick={onClick}
+      onContextMenu={onContextMenu}
+    >
+      {content}
+    </div>
+  ));
+
   const renderBoard = useCallback(
-    (isOpponent: boolean, game: any) => {
-      if (!gameStates || !playerId) return null;
+    (isOpponent: boolean, game: any, pId: any) => {
+      if (!gameStates) return null;
 
       const { ratioX, ratioY, cells } = game;
-      const currentPlayerState = playerStates.get(playerId);
-      const opponentId = Array.from(playerStates.keys()).find((id) => id !== playerId);
-      const opponentState = opponentId ? playerStates.get(opponentId) : null;
-
+      const currentPlayerState = playerStates.get(pId);
       const currentRevealed = currentPlayerState?.revealedCells || new Set();
       const currentFlags = currentPlayerState?.flags || new Set();
-      const opponentRevealed = opponentState?.revealedCells || new Set();
-      const opponentFlags = opponentState?.flags || new Set();
 
-      // Tạo mảng cells một lần để tối ưu hiệu suất
+      // Memoize các giá trị không thay đổi giữa các lần render
+      const gameOver = checkGameOver();
+      const canInteractGlobal = !isOpponent && !gameOver && gameStarted;
+
       return (
         <div
           className="grid gap-[1px] bg-gray-300 p-1 border-2 border-t-white border-l-white border-b-gray-500 border-r-gray-500 rounded-sm"
@@ -906,11 +992,11 @@ const PvpPlay: React.FC<PvpPlayProp> = ({ socket, onInRoom, onLeaveRoom }) => {
           }}
         >
           {cells.map((cell: any, index: number) => {
-            const isRevealed = isOpponent ? opponentRevealed.has(index) : currentRevealed.has(index);
-            const isFlagged = isOpponent ? opponentFlags.has(index) : currentFlags.has(index);
-            const canInteract = !isOpponent && !checkGameOver() && !isRevealed;
+            const isRevealed = currentRevealed.has(index);
+            const isFlagged = currentFlags.has(index);
+            const canInteract = canInteractGlobal && !isRevealed;
             const interactive = canInteract && gameStarted;
-            const canChording = currentRevealed.has(index) && !isOpponent;
+            const canChording = isRevealed && !isOpponent;
 
             let content = "";
             if (isFlagged) content = "🚩";
@@ -928,14 +1014,13 @@ const PvpPlay: React.FC<PvpPlayProp> = ({ socket, onInRoom, onLeaveRoom }) => {
             ].join(" ");
 
             return (
-              <div
+              <Cell
                 key={index}
+                content={content}
                 className={cellClasses}
-                onClick={() => interactive ? openCell(index) : canChording ? chording(index) : undefined}
+                onClick={interactive ? () => openCell(index) : canChording ? () => chording(index) : undefined}
                 onContextMenu={canInteract ? (e) => toggleFlag(index, e) : undefined}
-              >
-                {content}
-              </div>
+              />
             );
           })}
         </div>
@@ -955,7 +1040,16 @@ const PvpPlay: React.FC<PvpPlayProp> = ({ socket, onInRoom, onLeaveRoom }) => {
           placeholder="Tên của bạn"
           value={playerName}
           onChange={(e) => setPlayerName(e.target.value)}
-          className="px-2 py-1 border border-gray-400 bg-white text-sm w-full mb-2 rounded-sm"
+          className="w-[75%] px-2 py-1 border border-gray-400 bg-white text-sm mb-2 rounded-sm"
+        />
+        <input
+          type="number"
+          min={2}
+          max={5}
+          value={+maxPlayers}
+          onChange={(e) => setMaxPlayers(+e.target.value)}
+          placeholder="Số người"
+          className="w-[25%] px-2 py-1 border border-gray-400 bg-white text-sm flex-grow rounded-sm"
         />
         <div className="flex gap-2">
           <input
@@ -980,7 +1074,7 @@ const PvpPlay: React.FC<PvpPlayProp> = ({ socket, onInRoom, onLeaveRoom }) => {
         </div>
       </div>
     );
-  }, [roomId, gameStates, playerName, joinRoom, createRoom]);
+  }, [roomId, gameStates, playerName, maxPlayers, joinRoom, createRoom]);
 
   const renderLobbyControls = useCallback(() => {
     if (gameStarted) return null;
@@ -996,7 +1090,7 @@ const PvpPlay: React.FC<PvpPlayProp> = ({ socket, onInRoom, onLeaveRoom }) => {
           </button>
         );
       }
-      return Object.keys(gameStates).length === 2 ? (
+      return Object.keys(gameStates).length === maxPlayers ? (
         <button
           onClick={startGame}
           className="px-2 py-1 bg-gray-300 text-gray-800 border-2 border-t-white border-l-white border-b-gray-500 border-r-gray-500 hover:bg-gray-400 text-sm rounded-sm"
@@ -1096,12 +1190,12 @@ const PvpPlay: React.FC<PvpPlayProp> = ({ socket, onInRoom, onLeaveRoom }) => {
                 {pId === playerId ? "Bạn" : "Đối thủ"}
               </span>
             </h3>
-            {renderBoard(pId !== playerId, game)}
+            {renderBoard(pId !== playerId, game, pId)}
           </div>
         ))}
       </div>
     );
-  }, [gameStates, players, playerId, renderBoard]);
+  }, [gameStates, playerStates, players, playerId, renderBoard]);
 
   return (
     <div className="p-4 bg-gray-200 font-sans">

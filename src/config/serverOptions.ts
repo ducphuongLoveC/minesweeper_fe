@@ -3,7 +3,10 @@ export type serverOptionsProp = {
     path: string,
 }
 export const serverOptionsConfig: serverOptionsProp[] = [
-
+    {
+        title: 'Máy chủ local (server của dev)',
+        path: 'http://localhost:3000',
+    },
     {
         title: 'Máy chủ cloudflared',
         path: 'https://activated-those-sight-adolescent.trycloudflare.com',
@@ -19,9 +22,5 @@ export const serverOptionsConfig: serverOptionsProp[] = [
     {
         title: 'Máy chủ render',
         path: 'https://minesweeper-be.onrender.com',
-    },
-    {
-        title: 'Máy chủ local (server của dev)',
-        path: 'http://localhost:3000',
     },
 ]

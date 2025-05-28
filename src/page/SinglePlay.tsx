@@ -35,9 +35,7 @@ function SinglePlay() {
     const [endedGame, setEndedGame] = useState(false);
     const [socket, setSocket] = useState<any>(null);
 
-
     const { selectedServer } = useAppSelector((state) => state.serverOptions);
-
 
     useEffect(() => {
         const newSocket = io(`${selectedServer}/single`, {
@@ -95,8 +93,8 @@ function SinglePlay() {
         setEndedGame(false);
     }, [normalizePlayerState]);
 
-    const handleUpdateState = useCallback(({ gameState, playerState }: any) => {
-        setGameState(gameState);
+    const handleUpdateState = useCallback(({ playerState }: any) => {
+        // setGameState(gameState);
         setPlayerState(normalizePlayerState(playerState));
     }, [normalizePlayerState]);
 

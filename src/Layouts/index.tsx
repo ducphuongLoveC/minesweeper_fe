@@ -141,6 +141,7 @@ import { useAppDispatch, useAppSelector } from "../hooks/useRedux";
 import { selectServer } from "../store/features/serverOptions";
 import { toast } from "react-toastify";
 import io, { Socket } from "socket.io-client";
+import { Cog6ToothIcon, PlayIcon, ServerStackIcon, TrophyIcon, UserCircleIcon, UsersIcon } from "@heroicons/react/24/solid";
 
 // Define types for server and state
 interface Server {
@@ -322,7 +323,7 @@ const MainLayout: React.FC = () => {
             onClick={() => setShowMenu(!showMenu)}
             className="flex items-center gap-2 text-sm font-medium text-gray-800 border-2 border-t-white border-l-white border-b-gray-500 border-r-gray-500 px-2 py-1 bg-gray-200 hover:bg-gray-300"
           >
-            🧑 UserFake ▼
+            <UserCircleIcon className="w-5 h-5 text-gray-800" /> User ▼
           </button>
 
           {showMenu && (
@@ -334,10 +335,10 @@ const MainLayout: React.FC = () => {
                 }}
                 className="block w-full text-left px-3 py-2 text-sm text-gray-800 hover:bg-gray-400"
               >
-                ⚙️ Cấu hình server
+                <ServerStackIcon className="w-5 h-5 text-gray-800 inline-block mr-1" /> Cấu hình server
               </button>
               <button className="block w-full text-left px-3 py-2 text-sm text-gray-800 hover:bg-gray-400">
-                🚪 Đăng xuất
+                Đăng xuất
               </button>
             </div>
           )}
@@ -352,23 +353,24 @@ const MainLayout: React.FC = () => {
           <nav className="flex-1">
             <ul className="space-y-1">
               {[
-                { to: "/", label: "🎮 Chơi đơn" },
-                { to: "/pvp", label: "👥 Chơi PVP" },
-                { to: "/leaderboard", label: "🏆 Bảng xếp hạng" },
-                { to: "/settings", label: "⚙️ Cài đặt" },
-              ].map((item) => (
-                <li key={item.to}>
-                  <NavLink
-                    to={item.to}
-                    className={({ isActive }) =>
-                      `block px-3 py-2 text-sm font-medium text-gray-800 border-2 border-t-white border-l-white border-b-gray-500 border-r-gray-500 rounded-sm ${isActive ? "bg-gray-200" : "bg-gray-300 hover:bg-gray-400"
-                      }`
-                    }
-                  >
-                    {item.label}
-                  </NavLink>
-                </li>
-              ))}
+                { to: "/", label: "Chơi đơn", icon: <PlayIcon className="w-5 h-5 text-green-600" /> },
+                { to: "/pvp", label: "Chơi PVP", icon: <UsersIcon className="w-5 h-5 text-blue-600" /> },
+                { to: "/leaderboard", label: "Bảng xếp hạng", icon: <TrophyIcon className="w-5 h-5 text-yellow-500" /> },
+                { to: "/settings", label: "Cài đặt", icon: <Cog6ToothIcon className="w-5 h-5 text-gray-700" /> },
+              ]
+                .map((item) => (
+                  <li key={item.to}>
+                    <NavLink
+                      to={item.to}
+                      className={({ isActive }) =>
+                        `flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-800 border-2 border-t-white border-l-white border-b-gray-500 border-r-gray-500 rounded-sm ${isActive ? "bg-gray-200" : "bg-gray-300 hover:bg-gray-400"}`
+                      }
+                    >
+                      {item.icon}
+                      {item.label}
+                    </NavLink>
+                  </li>
+                ))}
             </ul>
           </nav>
           <div className="mt-auto pt-3 border-t-2 border-t-white border-b-gray-500">
