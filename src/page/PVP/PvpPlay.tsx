@@ -121,11 +121,6 @@ const PvpPlay: React.FC<PvpPlayProp> = ({ socket, onInRoom, onLeaveRoom }) => {
     []
   );
 
-  const checkGameOver = useCallback(() => {
-    if (!gameStates) return false;
-    return Object.values(gameStates).some((game: any) => game.gameOver);
-  }, [gameStates]);
-
   // Tách các sự kiện socket thành các hàm riêng biệt để dễ quản lý
   const setupSocketEvents = useCallback(() => {
     const handleJoinedRoom = ({ roomId, playerId }: { roomId: string; playerId: string }) => {
@@ -311,23 +306,26 @@ const PvpPlay: React.FC<PvpPlayProp> = ({ socket, onInRoom, onLeaveRoom }) => {
 
 
   const handleOpenCell = useCallback((index: number) => {
-    if (gameStates && !checkGameOver() && gameStarted) {
+
+    console.log();
+    if (gameStates && gameStarted) {
+
       socket.emit("openCell", { roomId, index });
     }
-  }, [gameStates, roomId, socket, checkGameOver]);
+  }, [gameStates, gameStarted, roomId, socket]);
 
   const handleToggleFlag = useCallback((index: number, e: React.MouseEvent) => {
     e.preventDefault();
-    if (gameStates && !checkGameOver() && gameStarted) {
+    if (gameStates && gameStarted) {
       socket.emit("toggleFlag", { roomId, index });
     }
-  }, [gameStates, roomId, socket, checkGameOver]);
+  }, [gameStates, gameStarted, roomId, socket]);
 
   const handleChording = useCallback((index: number) => {
-    if (gameStates && !checkGameOver() && gameStarted) {
+    if (gameStates && gameStarted) {
       socket.emit("chording", { roomId, index });
     }
-  }, [gameStates, roomId, socket, checkGameOver]);
+  }, [gameStates, gameStarted, roomId, socket]);
 
   const Cell = React.memo(({
     content,
@@ -346,13 +344,14 @@ const PvpPlay: React.FC<PvpPlayProp> = ({ socket, onInRoom, onLeaveRoom }) => {
 
   const renderBoard = useCallback((isOpponent: boolean, game: any, pId: any) => {
     if (!gameStates) return null;
+    console.log(playerStates);
 
     const { ratioX, ratioY, cells } = game;
     const currentPlayerState = playerStates.get(pId);
     const currentRevealed = currentPlayerState?.revealedCells || new Set();
     const currentFlags = currentPlayerState?.flags || new Set();
-    const gameOver = checkGameOver();
-    const canInteractGlobal = !isOpponent && !gameOver && gameStarted;
+
+    const canInteractGlobal = !isOpponent && gameStarted;
 
     return (
       <div
@@ -396,7 +395,7 @@ const PvpPlay: React.FC<PvpPlayProp> = ({ socket, onInRoom, onLeaveRoom }) => {
         })}
       </div>
     );
-  }, [gameStates, playerStates, playerId, gameStarted, checkGameOver, handleOpenCell, handleToggleFlag, handleChording]);
+  }, [gameStates, playerStates, playerId, gameStarted, handleOpenCell, handleToggleFlag, handleChording]);
 
 
   const renderPreGameForm = useCallback(() => {
