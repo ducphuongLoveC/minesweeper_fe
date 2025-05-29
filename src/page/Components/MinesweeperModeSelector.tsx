@@ -329,7 +329,7 @@ const MinesweeperModeSelector: React.FC<MinesweeperModeSelectorProps> = ({ onMod
   const handleCustomSubmit = () => {
     const validatedMode = {
       ...customMode,
-      mines: Math.min(customMode?.mines || 20, Math.floor(customMode.rows * customMode.cols * 0.35)),
+      // mines: Math.min(customMode?.mines || 20, Math.floor(customMode.rows * customMode.cols * 0.35)),
     };
     handleModeSelect(validatedMode);
   };
@@ -408,13 +408,13 @@ const MinesweeperModeSelector: React.FC<MinesweeperModeSelectorProps> = ({ onMod
               <input
                 type="number"
                 min="1"
-                max={Math.floor(customMode.rows * customMode.cols * 0.35)}
+                // max={Math.floor(customMode.rows * customMode.cols * 0.35)}
                 value={customMode.mines}
                 onChange={(e) =>
                   setCustomMode({ ...customMode, mines: parseInt(e.target.value) || 1 })
                 }
                 className="w-full px-2 py-1 border border-gray-400 text-sm bg-white rounded-sm focus:outline-none"
-                placeholder={`1-${Math.floor(customMode.rows * customMode.cols * 0.35)}`}
+              // placeholder={`1-${Math.floor(customMode.rows * customMode.cols * 0.35)}`}
               />
             </div>
           </div>

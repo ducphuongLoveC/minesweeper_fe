@@ -139,7 +139,10 @@ const PvpPlay: React.FC<PvpPlayProp> = ({ socket, onInRoom, onLeaveRoom }) => {
           isHost: player.isHost
         };
       });
-      setGameStates(gameStates);
+
+      if (gameStates) {
+        setGameStates(gameStates);
+      }
       setPlayers(players);
       setPlayerStates(normalizePlayerStates(playerStates));
     };
@@ -568,7 +571,7 @@ const PvpPlay: React.FC<PvpPlayProp> = ({ socket, onInRoom, onLeaveRoom }) => {
 
   return (
     <div className="p-4 bg-gray-200 font-sans">
-      <header className="w-full max-w-[600px]">
+      <header className="w-full max-w-[520px]">
         {renderPreGameForm()}
         {renderGameLobby()}
       </header>

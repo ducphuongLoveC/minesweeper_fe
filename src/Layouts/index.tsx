@@ -384,7 +384,7 @@ const MainLayout: React.FC = () => {
         </div>
 
         {/* Main content */}
-        <div className="flex-1 overflow-auto p-4 bg-gray-200 border-2 border-t-white border-l-white border-b-gray-500 border-r-gray-500">
+        <div className="flex-1 overflow-auto p-4 bg-gray-200 border-2 border-t-white border-l-white">
           <Outlet />
         </div>
       </div>
