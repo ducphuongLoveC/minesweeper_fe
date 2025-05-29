@@ -568,7 +568,7 @@ const PvpPlay: React.FC<PvpPlayProp> = ({ socket, onInRoom, onLeaveRoom }) => {
 
   return (
     <div className="p-4 bg-gray-200 font-sans">
-      <header className="w-full max-w-[800px]">
+      <header className="w-full max-w-[500px]">
         {renderPreGameForm()}
         {renderGameLobby()}
       </header>
