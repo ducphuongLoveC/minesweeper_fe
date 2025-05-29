@@ -103,7 +103,12 @@ const PVP: React.FC = () => {
 
         const socket = io(`${selectedServer}/pvp`, {
             transports: ["websocket"],
-            reconnectionAttempts: 3,
+            upgrade: false,
+            forceNew: true,
+            reconnection: true,
+            reconnectionAttempts: 5,
+            reconnectionDelay: 1000,
+            timeout: 20000,
         });
         socketRef.current = socket;
 

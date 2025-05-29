@@ -39,10 +39,13 @@ function SinglePlay() {
 
     useEffect(() => {
         const newSocket = io(`${selectedServer}/single`, {
-            transports: ["websocket"],
-            reconnectionAttempts: 3,
+            transports: ["websocket"], // Chỉ sử dụng WebSocket
+            upgrade: false,
+            forceNew: true,
+            reconnection: true,
+            reconnectionAttempts: 5,
             reconnectionDelay: 1000,
-            autoConnect: false
+            timeout: 20000,
         });
 
         newSocket.connect();

@@ -171,11 +171,13 @@ function useSocketPing(serverUrl: string | null): SocketPingData {
   const socket = useMemo<Socket | null>(() => {
     if (!serverUrl) return null;
     return io(serverUrl, {
-      reconnectionAttempts: 5,
-      reconnectionDelay: 500,
-      timeout: 2000,
-      transports: ["websocket"],
+      transports: ["websocket"], // Chỉ sử dụng WebSocket
       upgrade: false,
+      forceNew: true,
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
+      timeout: 20000,
     });
   }, [serverUrl]);
 
@@ -266,10 +268,13 @@ const MainLayout: React.FC = () => {
     await Promise.all(
       server.map(async (srv: Server) => {
         const tempSocket = io(srv.path, {
-          autoConnect: true,
-          reconnection: false,
-          timeout: 2000,
-          transports: ["websocket"],
+          transports: ["websocket"], // Chỉ sử dụng WebSocket
+          upgrade: false,
+          forceNew: true,
+          reconnection: true,
+          reconnectionAttempts: 5,
+          reconnectionDelay: 1000,
+          timeout: 20000,
         });
 
         try {
