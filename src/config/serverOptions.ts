@@ -9,7 +9,7 @@ export const serverOptionsConfig: serverOptionsProp[] = [
     },
     {
         title: 'Máy chủ cloudflared',
-        path: 'https://hiring-gentleman-indicating-philosophy.trycloudflare.com',
+        path: ' https://rooms-bt-james-bite.trycloudflare.com',
     },
     {
         title: 'Máy chủ localtunnel',
