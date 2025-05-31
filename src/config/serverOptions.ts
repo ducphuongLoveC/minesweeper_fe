@@ -4,12 +4,12 @@ export type serverOptionsProp = {
 }
 export const serverOptionsConfig: serverOptionsProp[] = [
     {
-        title: 'Máy chủ local (server của dev)',
-        path: 'http://localhost:3000',
-    },
-    {
         title: 'Máy chủ cloudflared',
         path: ' https://motor-curious-pa-too.trycloudflare.com',
+    },
+    {
+        title: 'Máy chủ local (server của dev)',
+        path: 'http://localhost:3000',
     },
     {
         title: 'Máy chủ localtunnel',
