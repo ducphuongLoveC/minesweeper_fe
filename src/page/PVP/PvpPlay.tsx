@@ -383,7 +383,7 @@ const PvpPlay: React.FC<PvpPlayProp> = ({ socket, onInRoom, onLeaveRoom }) => {
             isRevealed
               ? "bg-gray-200"
               : "bg-gray-300 border-t-2 border-l-2 border-b-2 border-r-2 border-t-white border-l-white border-b-gray-500 border-r-gray-500",
-            interactive ? "cursor-pointer hover:bg-gray-400" : "cursor-default",
+            interactive ? "cursor-pointer" : "cursor-default",
           ].join(" ");
 
           return (
