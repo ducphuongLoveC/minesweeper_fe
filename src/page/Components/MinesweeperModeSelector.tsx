@@ -49,7 +49,7 @@ const MinesweeperModeSelector: React.FC<MinesweeperModeSelectorProps> = ({ onMod
   };
 
   return (
-    <div className="w-full font-sans">
+    <div className="font-sans">
       <h1 className="text-lg font-bold text-gray-800 mb-3 flex items-center gap-2">
         <SparklesIcon className="w-6 h-6 text-yellow-500" />
         Chọn chế độ
@@ -59,7 +59,7 @@ const MinesweeperModeSelector: React.FC<MinesweeperModeSelectorProps> = ({ onMod
           <button
             key={mode.name}
             onClick={() => handleModeSelect(mode)}
-            className={`w-full flex items-center justify-center gap-2 ${selectedMode.name === mode.name && !showCustom
+            className={`flex items-center justify-center gap-2 ${selectedMode.name === mode.name && !showCustom
               ? "bg-gray-200 border-t-white border-l-white border-b-gray-500 border-r-gray-500"
               : "bg-gray-300 border-t-white border-l-white border-b-gray-500 border-r-gray-500 hover:bg-gray-400"
               } border-2 font-medium text-sm rounded-sm px-1 py-1`}
@@ -72,7 +72,7 @@ const MinesweeperModeSelector: React.FC<MinesweeperModeSelectorProps> = ({ onMod
         ))}
         <button
           onClick={() => setShowCustom(!showCustom)}
-          className={`w-full flex items-center justify-center gap-2 ${showCustom || selectedMode.name === "Custom"
+          className={`flex items-center justify-center gap-2 ${showCustom || selectedMode.name === "Custom"
             ? "bg-gray-200 border-t-white border-l-white border-b-gray-500 border-r-gray-500"
             : "bg-gray-300 border-t-white border-l-white border-b-gray-500 border-r-gray-500 hover:bg-gray-400"
             } border-2 font-medium text-sm rounded-sm px-1 py-1`}
@@ -137,7 +137,7 @@ const MinesweeperModeSelector: React.FC<MinesweeperModeSelectorProps> = ({ onMod
               }
             />
           </div>
-          <Box as="button" onClick={handleCustomSubmit} className="w-full flex items-center justify-center gap-2">
+          <Box as="button" onClick={handleCustomSubmit} className="flex items-center justify-center gap-2">
             <CheckCircleIcon className="w-4 h-4 text-green-600" />
             Lưu
           </Box>
