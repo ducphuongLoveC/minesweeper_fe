@@ -227,7 +227,7 @@
 // export default SinglePlay;
 
 
-
+import { FaceSmileIcon, FaceFrownIcon } from '@heroicons/react/24/outline';
 import React, { useEffect, useState, useCallback } from "react";
 import MinesweeperModeSelector from "./Components/MinesweeperModeSelector";
 import { toast } from "react-toastify";
@@ -235,6 +235,13 @@ import { io } from "socket.io-client";
 import CustomDialog from "../components/CustomDialog";
 import { useAppSelector } from "../hooks/useRedux";
 import CellCpn from "../components/CellCpn";
+
+
+const statusGame = {
+    'playing': <FaceSmileIcon className="w-6 h-full text-green-500 p-0 m-0" />,
+    'lost': <FaceFrownIcon className="w-6 h-full text-red-500 p-0 m-0" />
+}
+
 
 function SinglePlay() {
     const [configMode, setConfigMode] = useState<any>(null);
@@ -248,6 +255,8 @@ function SinglePlay() {
     const [gameStarted, setGameStarted] = useState(false);
     const [endedGame, setEndedGame] = useState(false);
     const [socket, setSocket] = useState<any>(null);
+
+    const [statusPlayer, setStatusPlayer] = useState<string>('');
 
     const { selectedServer } = useAppSelector((state) => state.serverOptions);
 
@@ -311,8 +320,9 @@ function SinglePlay() {
         toast.error(message);
     }, []);
 
-    const handleGameInitialized = useCallback(({ gameState, revealedCells, flags }: any) => {
+    const handleGameInitialized = useCallback(({ gameState, revealedCells, flags, status }: any) => {
         setGameState(gameState);
+        setStatusPlayer(status)
         setPlayerState({
             revealedCells: new Set(revealedCells),
             flags: new Set(flags)
@@ -326,13 +336,19 @@ function SinglePlay() {
         // You can use actionData for any additional logic if needed
     }, [applyChanges]);
 
-    const handleGameOver = useCallback(({ message, revealedCells, flags }: any) => {
+    const handleGameOver = useCallback(({ message, revealedCells, flags, status }: any) => {
+        console.log(message);
+
+        console.log(status);
+        setStatusPlayer(status);
+
         setPlayerState({
             revealedCells: new Set(revealedCells),
             flags: new Set(flags)
         });
-        setDialogMessage(message);
-        setOpenDialog({ end: true });
+        // setDialogMessage(message);
+        // setOpenDialog({ end: true });
+        toast.success(message);
         setGameStarted(false);
         setEndedGame(true);
     }, []);
@@ -449,8 +465,10 @@ function SinglePlay() {
                 <div className="w-full text-center border-2 font-medium text-sm rounded-sm min-w-[100px] bg-gray-300 border-t-2 border-l-2 border-b-2 border-r-2 border-t-white border-l-white border-b-gray-500 border-r-gray-500">
                     1/{gameState?.totalMines}
                 </div>
-                <div className="w-full text-center border-2 font-medium text-sm rounded-sm min-w-[100px] bg-gray-300 border-t-2 border-l-2 border-b-2 border-r-2 border-t-white border-l-white border-b-gray-500 border-r-gray-500">
-                    1/{gameState?.totalMines}
+                <div onClick={() => {
+                    socket.emit("initializeGame", configMode);
+                }} className="cursor-pointer w-6 mx-2 flex items-center justify-center border-2 font-medium text-sm rounded-sm  bg-gray-300 border-t-2 border-l-2 border-b-2 border-r-2 border-t-white border-l-white border-b-gray-500 border-r-gray-500">
+                    {statusGame[statusPlayer]}
                 </div>
 
                 <div className="w-full text-center border-2 font-medium text-sm rounded-sm min-w-[100px] bg-gray-300 border-t-2 border-l-2 border-b-2 border-r-2 border-t-white border-l-white border-b-gray-500 border-r-gray-500">

@@ -607,9 +607,7 @@ const PvpPlay: React.FC<PvpPlayProp> = ({ socket, onInRoom, onLeaveRoom }) => {
     return newStates;
   }, []);
 
-  // Handle delta updates from server
   const handleDeltaUpdate = useCallback((data: any) => {
-    console.log(data);
 
     if (data.action) {
       const { playerId, action } = data;
@@ -621,7 +619,6 @@ const PvpPlay: React.FC<PvpPlayProp> = ({ socket, onInRoom, onLeaveRoom }) => {
           flags: new Set()
         };
 
-        // Apply changes
         if (action.changes?.revealedCells) {
           action.changes.revealedCells.forEach((idx: number) => {
             playerState.revealedCells.add(idx);
@@ -632,7 +629,6 @@ const PvpPlay: React.FC<PvpPlayProp> = ({ socket, onInRoom, onLeaveRoom }) => {
         return newStates;
       });
 
-      // Handle game over
       if (action.result?.isMine || action.result?.isWin) {
         const isCurrentPlayer = playerId === currentPlayer?.id;
         const message = action.result?.isMine
@@ -660,9 +656,8 @@ const PvpPlay: React.FC<PvpPlayProp> = ({ socket, onInRoom, onLeaveRoom }) => {
 
   // Setup socket event listeners
   useEffect(() => {
-    const handleSetGames = ({ gameStates, playerStates, playersStatus }: any) => {
+    const handleSetGames = ({ gameStates, playersStatus }: any) => {
       setGameStates(gameStates);
-      setPlayerStates(initializePlayerStates(playerStates));
 
       const newPlayers = playersStatus.map((pl: any) => {
         const [id, player]: any = Object.entries(pl)[0];
@@ -990,21 +985,20 @@ const PvpPlay: React.FC<PvpPlayProp> = ({ socket, onInRoom, onLeaveRoom }) => {
           <FaUser />
         </div>
         <div className="flex-1">
-          <div className="flex items-center">
+          <div className="flex items-center justify-between">
             <span className="font-medium text-sm text-gray-800">
               {player.name} {isCurrentPlayer && "(Bạn)"} {player.isHost && "(Host)"}
             </span>
-            {player.status === "won" && <FaCrown className="ml-1 text-yellow-500" size={12} />}
-            {player.status === "lost" && <FaSkull className="ml-1 text-gray-500" size={12} />}
             <div
               className={`ml-1 inline-block px-1 py-0.5 text-xs rounded-sm ${player.isReady ? "bg-green-200 text-green-800" : "bg-gray-400 text-gray-200"}`}
             >
               {player.isReady ? "Sẵn sàng" : "Chưa sẵn sàng"}
             </div>
           </div>
-          <div className="text-xs text-gray-500">
-            {player.status === "playing" ? "Đang chơi" :
-              player.status === "won" ? "Chiến thắng!" : "Thua cuộc"}
+          <div className="text-xs text-gray-500 flex items-center">
+            {player.status === "playing" ? "Đang chơi" : player.status === "won" ? "Chiến thắng!" : "Thua cuộc"}
+            {player.status === "won" && <FaCrown className="ml-1 text-yellow-500" size={12} />}
+            {player.status === "lost" && <FaSkull className="ml-1 text-gray-500" size={12} />}
           </div>
         </div>
       </Box>
@@ -1067,7 +1061,7 @@ const PvpPlay: React.FC<PvpPlayProp> = ({ socket, onInRoom, onLeaveRoom }) => {
 
   return (
     <div className="p-4 bg-gray-200 font-sans">
-      <header className="w-full max-w-[550px]">
+      <header className="w-full">
         {renderPreGameForm()}
         {renderGameLobby()}
       </header>
