@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Cog6ToothIcon,
   SparklesIcon,
@@ -48,6 +48,11 @@ const MinesweeperModeSelector: React.FC<MinesweeperModeSelectorProps> = ({ onMod
     handleModeSelect(validatedMode);
   };
 
+  useEffect(() => {
+    onModeChange(customMode)
+    // handleCustomSubmit();
+  }, [])
+
   return (
     <div className="font-sans">
       <h1 className="text-lg font-bold text-gray-800 mb-3 flex items-center gap-2">
@@ -87,8 +92,8 @@ const MinesweeperModeSelector: React.FC<MinesweeperModeSelectorProps> = ({ onMod
         </button>
       </div>
       {showCustom && (
-        <Box>
-          <div className="grid grid-cols-3 mb-3">
+        <Box className="inline-block">
+          <div className="inline-grid grid-cols-4 mb-3">
             <div>
               <label className="block text-xs text-gray-800 mb-1">Hàng</label>
               <Box as="input"

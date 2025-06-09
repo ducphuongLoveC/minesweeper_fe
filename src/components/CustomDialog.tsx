@@ -63,7 +63,7 @@ const CustomDialog: React.FC<CustomDialogProps> = ({
       <div
         ref={dialogRef}
         tabIndex={-1}
-        className={`bg-gray-300 w-full ${sizeClasses[size]} p-4 border-2 border-t-white border-l-white border-b-gray-600 border-r-gray-600 font-sans relative m-4 rounded-sm`}
+        className={`bg-gray-300 ${sizeClasses[size]} p-4 border-2 border-t-white border-l-white border-b-gray-600 border-r-gray-600 font-sans relative m-4 rounded-sm`}
       >
         {/* Close button */}
         <button
