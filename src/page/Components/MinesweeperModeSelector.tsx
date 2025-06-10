@@ -49,9 +49,8 @@ const MinesweeperModeSelector: React.FC<MinesweeperModeSelectorProps> = ({ onMod
   };
 
   useEffect(() => {
-    onModeChange(customMode)
-    // handleCustomSubmit();
-  }, [])
+    onModeChange(selectedMode);
+  }, []);
 
   return (
     <div className="font-sans">

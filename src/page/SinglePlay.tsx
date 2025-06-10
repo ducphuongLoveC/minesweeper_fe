@@ -1,5 +1,5 @@
 import { FaceSmileIcon, FaceFrownIcon, FlagIcon } from '@heroicons/react/24/solid';
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import MinesweeperModeSelector from "./Components/MinesweeperModeSelector";
 import { toast } from "react-toastify";
 import { io } from "socket.io-client";
@@ -7,6 +7,7 @@ import CustomDialog from "../components/CustomDialog";
 import { useAppSelector } from "../hooks/useRedux";
 import CellCpn from "../components/CellCpn";
 import { Box } from '../components/UI/Box';
+import CounterClock, { CounterClockHandle } from '../components/UI/Clock';
 
 const statusGame = {
     'playing': <FaceSmileIcon className="w-6 h-[100%] text-green-500 p-0 m-0" />,
@@ -28,8 +29,12 @@ function SinglePlay() {
     const [socket, setSocket] = useState<any>(null);
 
     const [statusPlayer, setStatusPlayer] = useState<string>('');
-
     const { selectedServer } = useAppSelector((state) => state.serverOptions);
+
+    const [isClockStarted, setIsClockStarted] = useState(false);
+
+    const actionClockRef = useRef<CounterClockHandle | null>(null);
+
 
     useEffect(() => {
         const newSocket = io(`${selectedServer}/single`, {
@@ -75,8 +80,12 @@ function SinglePlay() {
     }, []);
 
     const openCell = useCallback((index: number) => {
+        if (!isClockStarted) {
+            actionClockRef.current?.start();
+            setIsClockStarted(true);
+        }
         if (socket) socket.emit("openCell", { index });
-    }, [socket]);
+    }, [socket, isClockStarted]);
 
     const chording = useCallback((index: number) => {
         if (socket) socket.emit("chording", { index });
@@ -102,6 +111,9 @@ function SinglePlay() {
         });
         setGameStarted(true);
         setEndedGame(false);
+
+        actionClockRef.current?.reset();
+        setIsClockStarted(false);
     }, []);
 
     const handleStateUpdate = useCallback(({ changes, ...actionData }: any) => {
@@ -124,6 +136,7 @@ function SinglePlay() {
         toast.success(message);
         setGameStarted(false);
         setEndedGame(true);
+        actionClockRef.current?.destroy();
     }, []);
 
     useEffect(() => {
@@ -244,7 +257,7 @@ function SinglePlay() {
                         {statusGame[statusPlayer]}
                     </Box>
                     <Box>
-                        100
+                        <CounterClock ref={actionClockRef} />
                     </Box>
                 </div>
                 {gameState && <div className="mt-4">{renderBoard()}</div>}
